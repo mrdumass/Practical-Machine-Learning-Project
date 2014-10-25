@@ -34,12 +34,20 @@ dim(training)
 ```
 I partitioned the training set into a smaller set caller training1 really to speed up the running of the model
 ```{r}
-training1<-createDataPartion()
-
+InTrain<-createDataPartition(y=training$classe,p=0.3,list=FALSE)
+training1<-training[InTrain,]
+```
 So I decided to use caret with random forest as my model with 5 fold cross validation
 ```{r}
-rf_model<-train(classe~.,date=training,method="rf",trControl=trainControl(method="cv",number=5),prox=TRUE,allowParallel=True)
-print(rf-model)
+rf_model<-train(classe~.,data=training1,method="rf",
+                trControl=trainControl(method="cv",number=5),
+                prox=TRUE,allowParallel=TRUE)
+print(rf_model)
 print(rf_model$finalModel)
+```
+That is a pretty amazingly good model! .987 accuracy! I usually hope for something in the >.7 in my real work. submitted this model with my prediction on the test set and got 20 out of 20.
+```{r}
+pred<-predict(rf_model,newdata=test)
+print(pred)
 ```
 
