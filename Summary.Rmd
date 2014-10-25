@@ -1,10 +1,8 @@
----
+in---
 title: "Report"
 output: pdf_document
 date: "October 24, 2014"
 ---
-
-For this project we are using the 
 
 First Load in the required packages
 ```{r}
@@ -33,5 +31,15 @@ mostly_data<-apply(!is.na(training),2,sum)>19621
 training<-training[,mostly_data]
 test<-test[,mostly_data]
 dim(training)
+```
+I partitioned the training set into a smaller set caller training1 really to speed up the running of the model
+```{r}
+training1<-createDataPartion()
+
+So I decided to use caret with random forest as my model with 5 fold cross validation
+```{r}
+rf_model<-train(classe~.,date=training,method="rf",trControl=trainControl(method="cv",number=5),prox=TRUE,allowParallel=True)
+print(rf-model)
+print(rf_model$finalModel)
 ```
 
